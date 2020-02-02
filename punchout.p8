@@ -20,7 +20,7 @@ end
 function draw_boxing_ring(margin,y_start,floor_col,pole_col)
 
 	draw_floor(margin,y_start,floor_col)
-	draw_poles(margin,y_start,floor_col)
+	draw_poles(margin,y_start,pole_col)
 
 end
 
@@ -38,7 +38,16 @@ function draw_floor(margin,y_start,col)
 		y_coordinate+=1
 	end
 
-	rectfill(0,y_coordinate,128,128,col)sadasd
+	rectfill(0,y_coordinate,128,128,col)
+
+end
+
+function draw_poles(margin,y_coordinate,col)
+
+	rectfill(margin+1,y_coordinate-25,margin+5,y_coordinate+1,col)
+	rectfill(128-(margin+2),y_coordinate-25,128-(margin+6),y_coordinate+1,col)
+	circfill(128-(margin+2)-2,y_coordinate-25,2.5,col)
+	circfill(margin+1+2,y_coordinate-25,2.5,col)
 
 end
 
