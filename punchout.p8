@@ -6,9 +6,15 @@ audience_members={}
 
 function _init()
 
-	make_audience_member(20,0)
-	make_audience_member(40,1)
-	make_audience_member(30,2)
+	for i=20,105,9 do
+		make_audience_member(i,0)
+	end
+	for i=20,110,12 do
+		make_audience_member(i,1)
+	end
+	for i=20,110,15 do
+		make_audience_member(i,2)
+	end
 
 end
 
@@ -93,25 +99,37 @@ end
 -- layer: 0 is far back, 1 is middle row, 2 is front row
 function make_audience_member(x,layer)
 
+	local dark_skin=false
 	local color
 	local y
 	local body_radius
 	local head_radius
+	if flr(rnd(5))==0 then
+		dark_skin=true
+	end
 	if layer==0 then
-		y=5
+		y=18
 		head_radius=2
 		body_radius=4
-		color=4
+		color=5
 	elseif layer==1 then 
-		y=10
+		y=25
 		head_radius=3
 		body_radius=5
-		color=9
+		if dark_skin==true then
+			color=2
+		else
+			color=9
+		end
 	elseif layer==2 then
-		y=15
+		y=35
 		head_radius=4
 		body_radius=6
-		color=15
+		if dark_skin==true then
+			color=4
+		else
+			color=15
+		end
 	end
 	local audience_member= {
 		orig_y=y,
@@ -166,10 +184,6 @@ function make_audience_member(x,layer)
 			else 
 				line(self.x-1,self.y+1,self.x+1,self.y+1,0)
 				line(self.x-1,self.y+2,self.x+1,self.y+2,0)
-			end
-			if self.thrilled==true then -- arms
-				line(self.x-self.body_radius-1,self.y+3,self.x-self.body_radius-5,self.y,self.color)
-				line(self.x+self.body_radius+1,self.y+3,self.x+self.body_radius+5,self.y,self.color)
 			end
 		end
 	}
