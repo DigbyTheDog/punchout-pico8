@@ -6,7 +6,9 @@ audience_members={}
 
 function _init()
 
-	make_audience_member(20,1)
+	make_audience_member(20,0)
+	make_audience_member(40,1)
+	make_audience_member(30,2)
 
 end
 
@@ -91,6 +93,7 @@ end
 -- layer: 0 is far back, 1 is middle row, 2 is front row
 function make_audience_member(x,layer)
 
+	local color
 	local y
 	local body_radius
 	local head_radius
@@ -98,26 +101,38 @@ function make_audience_member(x,layer)
 		y=5
 		head_radius=2
 		body_radius=4
+		color=4
 	elseif layer==1 then 
 		y=10
 		head_radius=3
 		body_radius=5
+		color=9
 	elseif layer==2 then
 		y=15
 		head_radius=4
 		body_radius=6
+		color=15
 	end
 	local audience_member= {
 		orig_y=y,
 		x=x,
 		y=y,
-		head_radius=3,
-		body_radius=5,
+		head_radius=head_radius,
+		body_radius=body_radius,
+		color=color,
 		layer=layer,
 		mouth_open=false,
-		thrilled=true,
+		thrilled=false,
 		rising=true,
 		update=function(self)
+
+			if btnp(4) then
+				self.thrilled=true
+			end
+
+			if btnp(5) then
+				self.thrilled=false
+			end
 
 			if self.thrilled==true then
 				self.mouth_open=true
@@ -128,8 +143,22 @@ function make_audience_member(x,layer)
 		end,
 		draw=function(self)
 
-			circfill(self.x,self.y+5,self.body_radius,9) -- head
-			circfill(self.x,self.y,self.head_radius,9) -- head
+			if self.thrilled==true or self.y~=self.orig_y then -- rising body
+				if self.rising==true then
+					self.y-=1
+					if self.y==self.orig_y-5 then
+						self.rising=false
+					end
+				end
+				if self.rising==false then
+					self.y+=1
+					if self.y==self.orig_y then
+						self.rising=true
+					end
+				end
+			end
+			circfill(self.x,self.y+5,self.body_radius,self.color) -- body
+			circfill(self.x,self.y,self.head_radius,self.color) -- head
 			pset(self.x-2,self.y,0) -- eyes
 			pset(self.x+2,self.y,0)
 			if self.mouth_open==false then -- mouth
@@ -138,21 +167,10 @@ function make_audience_member(x,layer)
 				line(self.x-1,self.y+1,self.x+1,self.y+1,0)
 				line(self.x-1,self.y+2,self.x+1,self.y+2,0)
 			end
-			if self.thrilled==true then --arms
-				if self.rising==true then
-					self.y+=1
-					if self.y==self.orig_y+5 then
-						self.rising=false
-					end
-				end
-				if self.rising==false then
-					self.y-=1
-					if self.y==self.orig_y then
-						self.rising=true
-					end
-				end
+			if self.thrilled==true then -- arms
+				line(self.x-self.body_radius-1,self.y+3,self.x-self.body_radius-5,self.y,self.color)
+				line(self.x+self.body_radius+1,self.y+3,self.x+self.body_radius+5,self.y,self.color)
 			end
-
 		end
 	}
 	add(audience_members,audience_member)
