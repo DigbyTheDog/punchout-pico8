@@ -156,7 +156,7 @@ function make_audience_member(x,layer)
 		cheer_frame_counter=0,
 		update=function(self)
 
-			if crowd_goes_wild==true and self.thrilled==false then
+			if crowd_goes_wild==true then
 				if self.cheer_frame_counter==self.starts_cheering_on_frame then
 					self.thrilled=true
 				else
@@ -194,11 +194,10 @@ function make_audience_member(x,layer)
 			circfill(self.x,self.y,self.head_radius,self.color) -- head
 			pset(self.x-2,self.y,0) -- eyes
 			pset(self.x+2,self.y,0)
-			if self.mouth_open==false then -- mouth
-				line(self.x-1,self.y+2,self.x+1,self.y+2,0) 
-			else 
+
+			line(self.x-1,self.y+2,self.x+1,self.y+2,0) -- mouth
+			if self.mouth_open==true then 
 				line(self.x-1,self.y+1,self.x+1,self.y+1,0)
-				line(self.x-1,self.y+2,self.x+1,self.y+2,0)
 			end
 		end
 	}
