@@ -2,6 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+crowd_goes_wild=false
 audience_members={}
 
 function _init()
@@ -19,6 +20,14 @@ function _init()
 end
 
 function _update()
+
+	if btnp(4) then
+		crowd_goes_wild=true
+	end
+
+	if btnp(5) then
+		crowd_goes_wild=false
+	end
 
 	local mem
 	for mem in all(audience_members) do
@@ -104,6 +113,7 @@ function make_audience_member(x,layer)
 	local y
 	local body_radius
 	local head_radius
+	local starts_cheering_on_frame=flr(rnd(10))
 	if flr(rnd(5))==0 then
 		dark_skin=true
 	end
@@ -142,14 +152,19 @@ function make_audience_member(x,layer)
 		mouth_open=false,
 		thrilled=false,
 		rising=true,
+		starts_cheering_on_frame=starts_cheering_on_frame,
+		cheer_frame_counter=0,
 		update=function(self)
 
-			if btnp(4) then
-				self.thrilled=true
-			end
-
-			if btnp(5) then
+			if crowd_goes_wild==true and self.thrilled==false then
+				if self.cheer_frame_counter==self.starts_cheering_on_frame then
+					self.thrilled=true
+				else
+					self.cheer_frame_counter+=1
+				end
+			else
 				self.thrilled=false
+				self.cheer_frame_counter=0
 			end
 
 			if self.thrilled==true then
